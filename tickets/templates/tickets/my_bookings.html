@@ -1,0 +1,82 @@
+<body class="bg-light">
+
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Твой билет в мир ярких событий</h1>
+        <p>Бронируй места на лучшие музыкальные фестивали, концерты и кинопоказы в один клик.</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Мероприятие</th>
+                    <th>Тип билета</th>
+                    <th>Количество</th>
+                    <th>Дата</th>
+                    <th>Действие</th> </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td class="fw-bold">{{ booking.ticket.event.title }}</td>
+                    <td><span class="badge bg-secondary">{{ booking.ticket.ticket_type }}</span></td>
+                    <td>{{ booking.quantity }} шт.</td>
+                    <td>{{ booking.created_at }}</td>
+                    
+                    <td>
+                        {% if not booking.is_paid %}
+                            <a href="{% url 'pay_kaspi' booking.id %}" class="btn btn-warning btn-sm shadow-sm" style="font-weight: bold; margin-bottom: 5px;">
+                                💳 Kaspi Оплатить
+                            </a>
+                        {% else %}
+                            <span class="badge bg-success" style="display: block; margin-bottom: 5px;">✅ Оплачено</span>
+                        {% endif %}
+
+                        <a href="{% url 'delete_booking' booking.id %}" 
+                           class="btn btn-outline-danger btn-sm shadow-sm" 
+                           onclick="return confirm('Вы уверены?');">
+                           🗑 Удалить
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">Вы еще не купили ни одного билета.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/static/banner.jpg.jpg') no-repeat center center/cover;
+    height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 30px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+</style>
+</body>
